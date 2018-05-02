@@ -6,7 +6,7 @@ from PyQt5.QtWebKit import QWebSettings
 from PyQt5.QtWebKitWidgets import QWebView, QWebPage
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtWebChannel import QWebChannel
+import mutagen
 import os, sys
 from jinja2 import Template
 #config
@@ -14,12 +14,12 @@ URL = os.path.dirname(os.path.abspath(__file__)) + "/static/"
 URL = URL.replace("\\", "/")
 
 class QPLAYER_COMMAND(QObject):
-	def __init__(self, p, l, dName_index):
+	def __init__(self, p, l, trackInfo):
 		QObject.__init__(self)
 		self.statusNextComposition = False
 		self.p = p
 		self.l = l
-		self.dName_index = dName_index
+		self.trackInfo = trackInfo
 		self.p.currentMediaChanged.connect(self.nextCompositionPlayed)
 	@pyqtSlot()
 	def play(self):
@@ -49,7 +49,7 @@ class QPLAYER_COMMAND(QObject):
 	@pyqtSlot(result=str)
 	def getNameTrack(self):
 		return "<span class='number'>" + str(self.l.currentIndex()+1) +"</span> "+\
-			   self.dName_index[self.l.currentIndex()][0]
+			   self.trackInfo[self.l.currentIndex()][0]
 	@pyqtSlot()
 	def stop(self):
 		self.p.stop()
@@ -72,6 +72,24 @@ class QPLAYER_COMMAND(QObject):
 			self.statusNextComposition = False
 			return True
 		return False
+	@pyqtSlot(result=str)
+	def info(self):
+		pathCurrentSound = self.trackInfo[self.l.currentIndex()][2]
+		sizeFile = os.path.getsize(pathCurrentSound)
+		audio = mutagen.File(pathCurrentSound)
+		info = """
+			 <div class="left">
+				 {bitrate}kbps {ch}ch {size}MB
+			 </div>
+			 <div class="right">
+				{lengthm}:{lengths}
+			 </div>
+				""".format(bitrate=audio.info.bitrate//1000,
+					ch=audio.info.channels,
+					lengthm=int(audio.info.length // 60),
+					lengths=int(audio.info.length % 60),
+					size=sizeFile//1000000)
+		return info
 class App(QWidget):
 	def __init__(self, player, playlist, trackInfoList, *args, **kwargs):
 		QWidget.__init__(self, *args, **kwargs)
@@ -90,34 +108,19 @@ class App(QWidget):
 		template_compos = ""
 		#генерируем список воспроизведения
 		for name in trackInfoList:
-			info = """
-			<div class="track-info">
-			     <span class="left">
-                     {bitrate}kbps {ch}ch {size}MB
-                 </span>
-                 <span class="right">
-                    {lengthm}:{lengths}
-                 </span>
-			</div>"""\
-				.format(bitrate=name[2].info.bitrate//1000,
-						ch=name[2].info.channels,
-						lengthm=int(name[2].info.length // 60),
-						lengths=int(name[2].info.length % 60),
-						size=name[3]//1000000)
-			template_compos += """<div class="composition" onclick="select_music(%s, this)" valued="%s">
-						 <div class="picture" >
-							 <div class="picture-play">
-								 <div class="picture-play-span">
-									 <span class="glyphicon glyphicon-play"></span>
-								 </div>
-							 </div>
-						 </div>
-						 <div class="composition_text">%s</div>
-						 %s
-					 </div>""" % (str(name[1]-1),
-								  str(name[1]-1),
-								  "<span class='number'>"+str(name[1])+"</span> "+name[0],
-								  info)
+			template_compos += """
+			<div class="composition" onclick="select_music(%s, this)" valued="%s">
+			 <div class="picture" >
+				 <div class="picture-play">
+					 <div class="picture-play-span">
+						 <span class="glyphicon glyphicon-play"></span>
+					 </div>
+				 </div>
+			 </div>
+			 <div class="composition_text">%s</div>
+			</div>""" % (str(name[1]-1),
+					  str(name[1]-1),
+					  "<span class='number'>"+str(name[1])+"</span> "+name[0])
 
 		view.setHtml(template.render(URL=URL, COMPOS=template_compos), QUrl("file:///"+URL))
 		self.setWindowTitle('VK Player')

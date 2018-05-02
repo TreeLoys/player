@@ -62,7 +62,7 @@
                  $(".spanplaied").removeClass("glyphicon-pause").addClass("glyphicon-play")
                  $(elem).find(".glyphicon").removeClass("glyphicon-play").addClass("glyphicon-pause spanplaied")
                  $(elem).addClass("plaied")
-                 $(".advance-info").html($(elem).find(".track-info").html())
+                 $(".advance-info").html(qplayer.info())
                  if (!isNext) {
                      qplayer.setIndex(index);
                      qplayer.play();

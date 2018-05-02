@@ -6,27 +6,25 @@ from PyQt5.QtCore import QUrl
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtWidgets import QApplication, QFileDialog, QMessageBox, QWidget
 from browser import App
-from mutagen import File, StreamInfo
+"""from mutagen import File, StreamInfo
+audio = File(os.path.normpath(sound_path))
 
+"""
 def load_all_in_default_folder(DEFAULT_DIR):
 	#print u"Произвожу загрузку из папки..."
 	music_folder = os.listdir(DEFAULT_DIR)
 	playList = QMediaPlaylist()
 	trackInfo = []
-	TEXT = ""
 	for trac in music_folder:
 		sound_path = DEFAULT_DIR +"\\"+ trac
 		sound_name = trac
 		try:
 			if os.path.isfile(os.path.normpath(sound_path)) and sound_path[-3:] == "mp3":
-
-				audio = File(os.path.normpath(sound_path))
-
 				url = QUrl.fromLocalFile(os.path.normpath(sound_path))
 				playList.addMedia(QMediaContent(url))
 				sound_index = playList.mediaCount()
-				sizeFile = os.path.getsize(os.path.normpath(sound_path))
-				trackInfo.append([sound_name[:-4], sound_index, audio, sizeFile])
+
+				trackInfo.append([sound_name[:-4], sound_index, os.path.normpath(sound_path)])
 		except Exception as e:
 			print "Error: "+e.message
 			continue

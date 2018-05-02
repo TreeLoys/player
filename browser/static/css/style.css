@@ -6,7 +6,9 @@
 
 }
 /*Кнопки навигации*/
-
+.glyphicon-pause{
+    left: -1px;
+}
 .circle {
     width: 28px; /* задаете свои размеры */
     height: 28px;
@@ -102,12 +104,12 @@ body, html {
 }
 /*Дополнительная инфа о треке*/
 .advance-info{
-    padding: 5px;
+    padding: 5px 0 5px 5px;
     color: #b1b1b1;
 }
 .advance-info .left{
-    width: 69%;
-    display: inline-block;
+    width: 70%;
+    float: left;
 }
 .advance-info .right{
     width: 30%;
