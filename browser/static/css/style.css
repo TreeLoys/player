@@ -105,6 +105,15 @@ body, html {
     padding: 5px;
     color: #b1b1b1;
 }
+.advance-info .left{
+    width: 69%;
+    display: inline-block;
+}
+.advance-info .right{
+    width: 30%;
+    text-align: right;
+    display: inline-block;
+}
 .row_br2{
     top: 27px;
     position: relative;
@@ -190,9 +199,7 @@ body, html {
 .composition_text .number, .namemusic .number{
     color: #999999;
 }
-.played_compos{
 
-}
-.all_composition{
-
+.track-info{
+    display: none;
 }

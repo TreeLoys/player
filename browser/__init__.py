@@ -73,14 +73,14 @@ class QPLAYER_COMMAND(QObject):
 			return True
 		return False
 class App(QWidget):
-	def __init__(self, player, playlist, dName_index, *args, **kwargs):
+	def __init__(self, player, playlist, trackInfoList, *args, **kwargs):
 		QWidget.__init__(self, *args, **kwargs)
 		view = QWebView(self)
 
 		view.resize(800, 600)
 		#для перехвата post
 		page = QWebPage()
-		self.qplayer = QPLAYER_COMMAND(player, playlist, dName_index)
+		self.qplayer = QPLAYER_COMMAND(player, playlist, trackInfoList)
 		page.mainFrame().addToJavaScriptWindowObject("qplayer", self.qplayer)
 		page.settings().setAttribute(QWebSettings.DeveloperExtrasEnabled, True)
 		view.setPage(page)
@@ -89,7 +89,21 @@ class App(QWidget):
 			template = Template(f.read().decode("utf8"))
 		template_compos = ""
 		#генерируем список воспроизведения
-		for name in dName_index:
+		for name in trackInfoList:
+			info = """
+			<div class="track-info">
+			     <span class="left">
+                     {bitrate}kbps {ch}ch {size}MB
+                 </span>
+                 <span class="right">
+                    {lengthm}:{lengths}
+                 </span>
+			</div>"""\
+				.format(bitrate=name[2].info.bitrate//1000,
+						ch=name[2].info.channels,
+						lengthm=int(name[2].info.length // 60),
+						lengths=int(name[2].info.length % 60),
+						size=name[3]//1000000)
 			template_compos += """<div class="composition" onclick="select_music(%s, this)" valued="%s">
 						 <div class="picture" >
 							 <div class="picture-play">
@@ -99,7 +113,11 @@ class App(QWidget):
 							 </div>
 						 </div>
 						 <div class="composition_text">%s</div>
-					 </div>""" % (str(name[1]-1), str(name[1]-1), "<span class='number'>"+str(name[1])+"</span> "+name[0])
+						 %s
+					 </div>""" % (str(name[1]-1),
+								  str(name[1]-1),
+								  "<span class='number'>"+str(name[1])+"</span> "+name[0],
+								  info)
 
 		view.setHtml(template.render(URL=URL, COMPOS=template_compos), QUrl("file:///"+URL))
 		self.setWindowTitle('VK Player')
