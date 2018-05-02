@@ -1,0 +1,198 @@
+.navigation{
+    width: 100%;
+    height: 55px;
+    position: relative;
+    top: 13px;
+
+}
+/*Кнопки навигации*/
+
+.circle {
+    width: 28px; /* задаете свои размеры */
+    height: 28px;
+    border-radius: 50%;
+    background-color: #5181b8;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 5px 2px 6px 9px;
+    cursor: pointer;
+    display: block;
+    float: left;
+}
+.circle:hover{
+    background-color: #4a719e;
+}
+.undo:hover, .rendo:hover{
+    color: #4a719e;
+}
+
+.undo, .rendo{
+    float: left;
+    width: 19px;
+    height: 28px;
+    font-size: 11pt;
+    padding: 5px 0px 0px 8px;
+    cursor: pointer;
+    display: block;
+    color:#5181b8;
+}
+.namemusic{
+    width: 95%;
+    height: 15px;
+    font-size: 12pt;
+    position: relative;
+    top: -24px;
+    left: 80px;
+    float: left;
+    display: block;
+
+}
+.time{
+    width: 5%;
+    float: left;
+    display: block;
+    position: relative;
+    right: 0;
+    top: -21px;
+    color: #999999;
+    text-align: right;
+}
+/*прокрутка*/
+.rolex{
+    width: 87%;
+    height: 3px;
+    background-color: #b8c7d7;
+    top: 28px;
+    left: 80px;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    /*border-radius: 50%;*/
+}
+.play-position{
+    height: 3px;
+    width: 22%;
+    background-color: #5181b8;
+}
+.rolex:hover{
+    height: 5px;
+    top: 27px;
+}
+.rolex:hover .play-position{
+    height: 5px;
+}
+body, html {
+    width: 100%;
+    height: 100%;
+    background-color: #edeef0 !important;
+    color: rgb(15, 28, 54) !important;
+}
+/*bootstrap делает дичь, по этому*/
+.row{
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+.row_br{
+    top: 7px;
+    position: relative;
+}
+.row_br3{
+    top: 17px;
+    position: relative;
+}
+/*Дополнительная инфа о треке*/
+.advance-info{
+    padding: 5px;
+    color: #b1b1b1;
+}
+.row_br2{
+    top: 27px;
+    position: relative;
+}
+.color-base{
+    background-color: #ffffff !important;
+    min-height: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    top: 0px;
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,.11);
+}
+/*Таблица композиций*/
+.composition{
+    display: block;
+    border: none;
+    background: transparent;
+    outline: none;
+    position: relative;
+    width: 100%;
+    padding: 4px;
+    cursor: pointer;
+    text-align: left;
+    /*color: #000;*/
+    font-size: 13px;
+    line-height: 40px;
+    font-weight: 500;
+    bottom: 15px;
+}
+.composition:hover{
+    background-color: #f2f4f7;
+    border-radius: 2px;
+
+}
+.composition .picture-play{
+    background-color: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    display: none;
+}
+.composition:hover .picture-play{
+    display: block;
+}
+.plaied{
+    background-color: #e9edf1 !important;
+    border-radius: 2px;
+
+}
+.plaied .picture-play{
+    display: block;
+}
+.picture-play-span{
+     border-radius: 50%;
+    background-color: #ffffff;
+    color: #000000;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    left: 8px;
+    top: 8px;
+}
+.picture-play-span span{
+    display: block;
+    position: relative;
+    top: 6px;
+    left: 6px;
+}
+.composition .picture{
+    width: 40px;
+    height: 40px;
+    background-image: url("../img/audio_row_placeholder.png");
+    border-radius: 4px;
+    transition: background-color 60ms linear;
+    float: left;
+}
+.composition_text{
+    position: relative;
+    left: 5px;
+    float: none;
+}
+.composition_text .number, .namemusic .number{
+    color: #999999;
+}
+.played_compos{
+
+}
+.all_composition{
+
+}

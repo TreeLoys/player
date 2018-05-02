@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+	<link rel="stylesheet" href="./css/style.css">
+
+		<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="./bootstrap/css/costum.css" rel="stylesheet">
+		<script src="./bootstrap/js/jquery.js"></script>
+		<script src="./bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+ <div class="content">
+     <div class="row row_br">
+         <div class="col-xs-1"></div>
+         <div class="col-xs-10 color-base">
+             <div class="navigation">
+                 <div class="circle" onclick="playstop()">
+                     <span id="onof-1" class="glyphicon glyphicon-play"></span>
+                     <span id="onof-2" class="glyphicon glyphicon-pause" style="display: none;"></span>
+                 </div>
+                 <div class="undo" onclick="prevsound()"><span class="glyphicon glyphicon-step-backward"></span></div>
+                 <div class="rendo" onclick="nextsound()"><span class="glyphicon glyphicon-step-forward"></span></div>
+                 <div id="namemusic" class="namemusic">Ghetto Dogs – В клубе vk.com/ghettodogs</div>
+                 <div id="time" class="time">2:30</div>
+                 <!--Класс в котором будет скользить другой класс-->
+                 <div class="rolex" onclick="getCurCoordsInsideRect(getElement(event, this))">
+                     <div class="play-position"></div>
+                 </div>
+
+                 <script>
+                     //определение
+                    function getCurCoordsInsideRect(e, elem) {
+                        var x = e.offsetX == undefined ? e.layerX : e.offsetX;
+                        var y = e.offsetY == undefined ? e.layerY : e.offsetY;
+
+                        var width = elem.offsetWidth;
+                        var totalproc = x * 100 / width;
+                        //totalproc - в процентах куда нам нужно перейти
+
+
+                        var provide = $(".play-position").css("width");
+                        $(".play-position").css("width", totalproc+"%");
+                        qplayer.setPosition(totalproc);
+                        console.log("Provide: "+provide);
+                    }
+                    function getElement(e, element) {
+                        getCurCoordsInsideRect(e, element);
+                    }
+                 </script>
+             </div>
+
+         </div>
+         <script>
+             function select_music(index, elem, isNext) {
+
+                 $("#onof-2").show();
+                 $("#onof-1").hide();
+                 play=false;
+                 $(".plaied").removeClass("plaied")
+                 $(".spanplaied").removeClass("glyphicon-pause").addClass("glyphicon-play")
+                 $(elem).find(".glyphicon").removeClass("glyphicon-play").addClass("glyphicon-pause spanplaied")
+                 $(elem).addClass("plaied")
+                 if (!isNext) {
+                     qplayer.setIndex(index);
+                     qplayer.play();
+                 }
+             }
+             //control player
+             var play = true;
+             function playstop() {
+                 try{
+                     if (play){
+                         $("#onof-2").show();
+                         $("#onof-1").hide();
+                         play=false;
+                         qplayer.play();
+
+                     }else{
+                         $("#onof-1").show();
+                         $("#onof-2").hide();
+                         play=true;
+                         qplayer.pause();
+                     }
+
+                 }catch (e){}
+                 console.log(play);
+             }
+             function nextsound() {
+                 updateCurrentName()
+                 qplayer.next()
+                 var cid= qplayer.getCurrentIndex()
+
+                 select_music(cid, $(".plaied").next(), true)
+             }
+             function prevsound() {
+                 updateCurrentName()
+                 qplayer.prev()
+                 var cid= qplayer.getCurrentIndex()
+
+                 select_music(cid, $(".plaied").prev(), true)
+             }
+             function updateCurrentName() {
+                 $("#namemusic").html(qplayer.getNameTrack())
+             }
+             //control qwebplaer
+             var intervalDuration = setInterval(function() {
+                 //для полосы с позицией проигрывания
+                 var procent = qplayer.position() * 100 / qplayer.duration()
+                 $(".play-position").css("width", procent+"%")
+                 updateCurrentName()
+                    var sec = qplayer.position()/1000.0;
+                    var h = Math.round(sec/3600 ^ 0 );
+
+                    var m = Math.round((sec-h*3600)/60 ^ 0 );
+
+                    var s = Math.round(sec-h*3600-m*60) ;
+                    if (s < 10){s = "0"+s}
+                 $("#time").html(m+":"+s)
+                 if (h > 0) {$("#time").html(h+":"+m+":"+s)}
+                 if(qplayer.timerNext()){
+                    var cid= qplayer.getCurrentIndex()
+                    select_music(cid, $(".plaied").next(), true)
+                }
+                 }, 1000);
+                //чекаем статус переходить нужно или нет
+
+         </script>
+         <div class="col-xs-1"></div><br>
+     </div>
+     <!--Возможность редактирования и доп инфа.-->
+     <div class="row row_br3">
+         <div class="col-xs-1"></div>
+         <div class="col-xs-10 color-base">
+             <div class="advance-info">
+                 <span style="width: 23%; display: inline-block;">
+                     320kbps 12.6 MB x1.0
+                 </span>
+                 <span style="width: 76%; text-align: right; display: inline-block;">
+                    <i>VK Offline player 2018, only to you. Free.</i>
+                 </span>
+             </div>
+         </div>
+         <div class="col-xs-1"></div>
+     </div>
+     <div class="row row_br2">
+         <div class="col-xs-1"></div>
+         <div class="col-xs-10 color-base">
+             <br>
+             <div class="all_composition">
+                 {{COMPOS}}
+             </div>
+
+             <br><i onclick="">Оффлайн плеер vk</i>
+         </div>
+         <div class="col-xs-1"></div>
+     </div>
+ </div>
+
+
+</body>
+</html>
